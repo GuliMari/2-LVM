@@ -271,4 +271,45 @@ UUID=570897ca-e759-4c81-90cf-389da6eee4cc /boot                   xfs     defaul
 #VAGRANT-END
 UUID="aede8edb-9c45-40dc-9c80-57ea5f40928c" /var ext4 defaults 0 0
 
+```
+
+Снова перезагружаем систему с уменьшенного рута и удаляем временный том и группу:
+
+```bash
+[root@lvm ~]# lvremove /dev/vg_root/lv_root
+Do you really want to remove active logical volume vg_root/lv_root? [y/n]: y
+  Logical volume "lv_root" successfully removed
+[root@lvm ~]# vgremove /dev/vg_root
+  Volume group "vg_root" successfully removed
+[root@lvm ~]# pvremove /dev/sdb
+  Labels on physical volume "/dev/sdb" successfully wiped.
+
+```
+Теперь выделяем том ппод /home, создаем ФС, копируем данные, монтируем:
+
+```bash
+[root@lvm ~]# mkfs.xfs /dev/VolGroup00/LogVol_Home
+meta-data=/dev/VolGroup00/LogVol_Home isize=512    agcount=4, agsize=131072 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0, sparse=0
+data     =                       bsize=4096   blocks=524288, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+[root@lvm ~]# mount /dev/VolGroup00/LogVol_Home /mnt/
+[root@lvm ~]# cp -aR /home/* /mnt/
+[root@lvm ~]# rm -rf /home/*
+[root@lvm ~]# umount /mnt
+[root@lvm ~]# mount /dev/VolGroup00/LogVol_Home /home/
+[root@lvm ~]# echo "`blkid | grep Home | awk '{print $2}'` /home xfs defaults 0 0" >> /etc/fstab
+
+```
+
+
+
+
+
+
 

@@ -16,12 +16,12 @@
 Задание со *:
 на нашей куче дисков попробовать поставить btrfs/zfs - с кешем, снэпшотами - разметить здесь каталог /opt
 
-## Исполнение
+## Выполнение
 
 Создаем виртуальную машину по имеющемуся образу и подключаемся через SSH.
 Команды выполнены от имени root.
 
-### 1. уменьшить том под / до 8G
+### Уменьшить том под / до 8G
 
 Посмотрим расположение каталога /:
 
@@ -176,6 +176,7 @@ done
 
 ```
 
+### Выделить том под /var (/var - сделать в mirror)
 Не выходя из chroot, создаем зеркало под /var:
 
 ```bash
@@ -285,7 +286,9 @@ Do you really want to remove active logical volume vg_root/lv_root? [y/n]: y
   Labels on physical volume "/dev/sdb" successfully wiped.
 
 ```
-Теперь выделяем том ппод /home, создаем ФС, копируем данные, монтируем:
+### Выделить том под /home
+
+Теперь выделяем том под /home, создаем ФС, копируем данные, монтируем:
 
 ```bash
 [root@lvm ~]# mkfs.xfs /dev/VolGroup00/LogVol_Home
@@ -306,7 +309,7 @@ realtime =none                   extsz=4096   blocks=0, rtextents=0
 [root@lvm ~]# echo "`blkid | grep Home | awk '{print $2}'` /home xfs defaults 0 0" >> /etc/fstab
 
 ```
-
+### Работа со снапшотами
 Создаем файлы в /home и делаем снапшот:
 
 ```bash

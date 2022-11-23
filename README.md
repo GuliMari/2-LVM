@@ -391,6 +391,10 @@ total 0
 -rw-r--r--. 1 root    root     0 Nov 23 05:28 file9
 drwx------. 3 vagrant vagrant 74 May 12  2018 vagrant
 
+```
+
+Все файлы восстановлены.
+
 
 
 

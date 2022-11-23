@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
     config.vm.box_version = "1804.02"
     MACHINES.each do |boxname, boxconfig|
         config.vm.synced_folder ".", "/vagrant", disabled: true
-        config.vm.boot_timeout = 3000
+        config.vm.boot_timeout = 2000
         config.vm.box_check_update = false
         
         config.vm.define boxname do |box|
